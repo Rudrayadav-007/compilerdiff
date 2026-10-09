@@ -1,38 +1,81 @@
 [
   {
-    "name": "arithmetic", "file": "arithmetic.c",
+    "name": "arithmetic",
+    "file": "arithmetic.c",
     "description": "int + - * / %, negative division, shifts, bitwise ops",
     "expected_stdout": "add=22\nsub=12\nmul=85\ndiv=3\nmod=2\nneg_div=-3\nneg_mod=-2\nshift=1024\nbits=49\n"
   },
   {
-    "name": "loops", "file": "loops.c",
+    "name": "loops",
+    "file": "loops.c",
     "description": "for/while loops: sum, factorial, Fibonacci, Collatz",
     "expected_stdout": "sum=5050\nfact10=3628800\nfib20=6765\ncollatz27=111\n"
   },
   {
-    "name": "arrays", "file": "arrays.c",
+    "name": "arrays",
+    "file": "arrays.c",
     "description": "fixed array, sum/max, bubble sort",
     "expected_stdout": "sorted: 1 2 3 4 5 7 8 9\nsum=39\nmax=9\n"
   },
   {
-    "name": "functions", "file": "functions.c",
+    "name": "functions",
+    "file": "functions.c",
     "description": "recursion, helper functions, prime counting",
     "expected_stdout": "gcd=6\npow=1024\nfact5=120\nprimes_below_50=15\n"
   },
   {
-    "name": "conditionals", "file": "conditionals.c",
+    "name": "conditionals",
+    "file": "conditionals.c",
     "description": "if/else chains and FizzBuzz",
     "expected_stdout": "-5 negative\n0 zero\n7 positive\n1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n"
   },
   {
-    "name": "boundary", "file": "boundary.c",
+    "name": "boundary",
+    "file": "boundary.c",
     "description": "INT_MAX/INT_MIN, unsigned wrap, widening (no signed overflow)",
     "expected_stdout": "int_max=2147483647\nint_min=-2147483648\nuint_max=4294967295\nuint_wrap=0\nint_max_plus_1=2147483648\nschar_max=127\nint_max_minus_1=2147483646\n"
   },
   {
-    "name": "exitcode", "file": "exitcode.c",
+    "name": "exitcode",
+    "file": "exitcode.c",
     "description": "nonzero exit status and stderr output",
     "expected_stdout": "exiting with 3\n",
     "expected_returncode": 3
+  },
+  {
+    "name": "bitops",
+    "file": "bitops.c",
+    "description": "unsigned shifts, masks, xor, popcount loop",
+    "expected_stdout": "shr=3855\nshl=986880\nand=240\nxor=3855\nnot16=3855\npopcount=8\n"
+  },
+  {
+    "name": "sieve",
+    "file": "sieve.c",
+    "description": "sieve of Eratosthenes over an int array",
+    "expected_stdout": "count=25\nsum=1060\nlargest=97\n"
+  },
+  {
+    "name": "matrix",
+    "file": "matrix.c",
+    "description": "3x3 matrix multiplication with 2D arrays",
+    "expected_stdout": "30 24 18\n84 69 54\n138 114 90\ntrace=189\n"
+  },
+  {
+    "name": "safe_limits",
+    "file": "safe_limits.c",
+    "description": "overflow-checked addition at INT_MIN/INT_MAX, unsigned wrap, integer promotion",
+    "expected_stdout": "add_max_1=overflow\nadd_max-1_1=2147483647\nadd_min_-1=overflow\nadd_min_max=-1\nuzero_minus_1=4294967295\nabs_min_plus_1=2147483647\nuchar_inc=0\npromote=256\n"
+  },
+  {
+    "name": "recursion",
+    "file": "recursion.c",
+    "description": "Ackermann, Hanoi, Fibonacci, digit recursion",
+    "expected_stdout": "ackermann_2_3=9\nhanoi_10=1023\nfib15=610\ndigit_sum=35\nreverse=54321\n"
+  },
+  {
+    "name": "strings",
+    "file": "strings.c",
+    "description": "char arrays: length, reverse in place, vowel count, palindrome",
+    "expected_stdout": "length=12\nvowels=3\nreversed=dlroW ,olleH\nracecar_palindrome=1\nhello_palindrome=0\n"
   }
 ]

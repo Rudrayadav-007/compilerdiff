@@ -1,4 +1,4 @@
-# CompilerDiff — Automated Compiler Verification Toolkit
+﻿# CompilerDiff — Automated Compiler Verification Toolkit
 
 > **Educational project. Not a production compiler verification system.**
 
@@ -28,7 +28,7 @@ flowchart LR
 ```
 
 ## Setup (Windows)
-Needs Python 3.10+, and optionally GCC and/or Clang **on PATH**.
+Needs Python 3.10+ and at least one of: GCC, Clang, or MSVC `cl` (Visual Studio Build Tools, "Desktop development with C++"). GCC/Clang must be on PATH; on Windows CompilerDiff loads the Visual Studio environment itself, which Clang also needs for the C headers.
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt   # pytest only
@@ -62,10 +62,10 @@ timeout, JSON validity with odd characters, test selection). End-to-end tests (f
 compile-error + real timeout, CLI report) run only if a **working** compiler exists, else skip.
 
 ## Verified status on the author's machine (2026-10-09)
-- `pytest`: **19 passed, 3 skipped** (the 3 end-to-end tests).
-- **No C compiler could be run**, so no end-to-end result exists yet. Python 3.14, Git present; GCC, Clang, nvcc, ptxas absent.
-- A user-scope WinLibs GCC install was tried: `gcc.exe` ran, but Windows Application Control blocked `as.exe` ("blocked this file"). It was uninstalled. The tool correctly reported `compile_failed` with that diagnostic.
-- Expected outputs in `corpus/manifest.json` were computed by hand and are **not yet validated by a real compiler run**.
+- Compilers: Clang 23.1.3 and MSVC cl 19.51 (GCC not installed). On Windows, CompilerDiff loads the Visual Studio environment (vswhere + vcvars64.bat) inside its own process so clang/cl find the C headers.
+- `main.py run`: 13 tests x 4 configurations = 52 compiled and executed, 52 passed, 13/13 cross-configuration matches, 0 discrepancies.
+- `pytest -q -rs`: 36 passed, 0 skipped (includes tests/test_discrepancy.py).
+- GCC, nvcc, ptxas absent; CUDA not exercised.
 
 ## Known limitations
 - Timeouts are **not a security sandbox**; only the bundled trusted corpus is executed. Never point it at untrusted code.
@@ -85,3 +85,8 @@ compile-error + real timeout, CLI report) run only if a **working** compiler exi
 `nvcc`/`ptxas` were not available, so nothing CUDA was run. [`examples/cuda_vector_add.cu`](examples/cuda_vector_add.cu)
 is a clearly labelled **untested** example; with the CUDA Toolkit: `nvcc -ptx examples/cuda_vector_add.cu -o vector_add.ptx`
 (no GPU needed to emit PTX). A future extension could assemble PTX with `ptxas` and check it assembles for several `--gpu-name` targets.
+
+## How comparison works / discrepancy validation
+See [LEARNING_GUIDE.md](LEARNING_GUIDE.md). Briefly: builds of the same test are grouped by (exit code, stdout, stderr) after ignoring only line endings and trailing whitespace; more than one group is reported as a **potential discrepancy** to investigate, not a compiler bug. `tests/test_discrepancy.py` validates this with simulated results.
+
+See also [PROJECT_WALKTHROUGH.md](PROJECT_WALKTHROUGH.md) for a code walkthrough with line numbers, audit findings and interview questions.

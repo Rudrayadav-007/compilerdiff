@@ -24,10 +24,19 @@ class CompileResult:
         return asdict(self)
 
 
+MSVC_OPT_FLAGS = {"-O0": "/Od", "-O1": "/O1", "-O2": "/O2", "-O3": "/O2"}
+
+
 def build_command(compiler: Compiler, source: str, output: str, opt: str) -> list[str]:
-    """Return the argv list (no shell). -Wall -Wextra surfaces warnings; -std=c11 pins the language."""
-    return [compiler.path or compiler.name, opt, "-std=c11", "-Wall", "-Wextra",
-            source, "-o", output]
+    """Return the argv list (no shell). -Wall -Wextra surfaces warnings; -std=c11 pins the language.
+    MSVC `cl` uses different flags, so optimization levels are translated (-O0 -> /Od, -O2 -> /O2)."""
+    exe = compiler.path or compiler.name
+    if compiler.name == "cl":
+        objdir = os.path.dirname(output) + os.sep
+        return [exe, "/nologo", MSVC_OPT_FLAGS.get(opt, "/O2"), "/std:c11", "/W3", source,
+                f"/Fe:{output}", f"/Fo:{objdir}"]
+    return [exe, opt, "-std=c11", "-Wall", "-Wextra", source, "-o", output]
+
 
 
 def binary_name(test: str, compiler: str, opt: str) -> str:

@@ -66,9 +66,29 @@ def test_all_failed():
 # ---- missing compiler handling ----
 def test_missing_compilers(monkeypatch):
     monkeypatch.setattr(compiler_discovery.shutil, "which", lambda n: None)
-    found = discover_compilers()
-    assert [c.available for c in found] == [False, False]
+    found = discover_compilers(use_vs_env=False)
+    assert [c.available for c in found] == [False] * len(compiler_discovery.SUPPORTED_COMPILERS)
     assert "not found" in found[0].error
+
+
+def test_msvc_command_translates_flags():
+    cl = Compiler("cl", True, r"C:\vs\cl.exe", "MSVC")
+    cmd = compiler_runner.build_command(cl, "t.c", r"C:\tmp\t.exe", "-O2")
+    assert "/O2" in cmd and "-O2" not in cmd and "/Fe:C:\\tmp\\t.exe" in cmd
+    assert "/Od" in compiler_runner.build_command(cl, "t.c", r"C:\tmp\t.exe", "-O0")
+
+
+def test_cl_version_read_from_stderr(monkeypatch):
+    monkeypatch.setattr(compiler_discovery.subprocess, "run",
+                        _fake_run(0, "", "Microsoft (R) C/C++ Optimizing Compiler 19.50\nusage: cl\n"))
+    assert compiler_discovery._get_version("cl.exe", "cl") == (
+        "Microsoft (R) C/C++ Optimizing Compiler 19.50", None)
+
+
+def test_vs_environment_skipped_when_already_loaded(monkeypatch):
+    monkeypatch.setenv("VSCMD_VER", "1")
+    assert compiler_discovery.load_vs_environment() is None
+
 
 
 def test_run_suite_skips_unavailable():

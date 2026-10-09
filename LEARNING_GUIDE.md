@@ -40,3 +40,15 @@ then `compare_configs()` per test -> `build_report()` -> `write_json()` + `forma
 5. How do you handle hangs/timeouts and what are the limits? (Timeout; not a sandbox.)
 6. Why return data instead of raising from runners? (Failures are test results.)
 7. How would you extend to CUDA? (`nvcc -ptx`, `ptxas`, compare across `-O` levels / sm targets; GPU runs need hardware.)
+
+## How the comparison works (beginner version)
+For each test the SAME C file is built several ways (e.g. clang -O0, clang -O2, cl -O0, cl -O2) and every build is run.
+1. **Per configuration** (`classify_config`): did it compile? time out? Does its stdout and exit code equal the manifest's expected values? -> `pass`, `fail_expected`, `compile_failed`, `timeout`, ...
+2. **Across configurations** (`compare_configs`): builds that ran normally are grouped by their *signature* = (exit code, stdout, stderr). One group -> `match`. More than one group -> `potential_discrepancy`, and the groups are listed.
+3. **Normalization** is deliberately tiny: line endings (`\r\n` -> `\n`) and trailing spaces/blank lines are ignored. Case, inner spacing and leading spaces still count.
+4. Compile failures and timeouts are never compared as if they were outputs; they appear in `not_compared`.
+A discrepancy is a *lead to investigate* (check the test for undefined behavior, compiler versions, library differences), not proof of a compiler bug.
+
+## Discrepancy validation (added later)
+- `tests/test_discrepancy.py` feeds the comparator simulated results to prove it flags different stdout, exit codes and stderr, ignores only trailing whitespace, groups 3-way splits, is deterministic, and that a discrepancy flows through `run_suite` into the report and summary. It also checks the corpus manifest matches the files and that programs avoid `rand`, `time`, `malloc`, `%p`, etc.
+- Corpus grew from 7 to 13 programs (`bitops`, `sieve`, `matrix`, `safe_limits`, `recursion`, `strings`), all free of undefined behavior (overflow is checked *before* it can happen).
