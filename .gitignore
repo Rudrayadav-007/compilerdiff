@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.pytest_cache/
+reports/*.json
+*.exe
+*.o
+*.ptx

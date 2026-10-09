@@ -1,0 +1,38 @@
+[
+  {
+    "name": "arithmetic", "file": "arithmetic.c",
+    "description": "int + - * / %, negative division, shifts, bitwise ops",
+    "expected_stdout": "add=22\nsub=12\nmul=85\ndiv=3\nmod=2\nneg_div=-3\nneg_mod=-2\nshift=1024\nbits=49\n"
+  },
+  {
+    "name": "loops", "file": "loops.c",
+    "description": "for/while loops: sum, factorial, Fibonacci, Collatz",
+    "expected_stdout": "sum=5050\nfact10=3628800\nfib20=6765\ncollatz27=111\n"
+  },
+  {
+    "name": "arrays", "file": "arrays.c",
+    "description": "fixed array, sum/max, bubble sort",
+    "expected_stdout": "sorted: 1 2 3 4 5 7 8 9\nsum=39\nmax=9\n"
+  },
+  {
+    "name": "functions", "file": "functions.c",
+    "description": "recursion, helper functions, prime counting",
+    "expected_stdout": "gcd=6\npow=1024\nfact5=120\nprimes_below_50=15\n"
+  },
+  {
+    "name": "conditionals", "file": "conditionals.c",
+    "description": "if/else chains and FizzBuzz",
+    "expected_stdout": "-5 negative\n0 zero\n7 positive\n1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n"
+  },
+  {
+    "name": "boundary", "file": "boundary.c",
+    "description": "INT_MAX/INT_MIN, unsigned wrap, widening (no signed overflow)",
+    "expected_stdout": "int_max=2147483647\nint_min=-2147483648\nuint_max=4294967295\nuint_wrap=0\nint_max_plus_1=2147483648\nschar_max=127\nint_max_minus_1=2147483646\n"
+  },
+  {
+    "name": "exitcode", "file": "exitcode.c",
+    "description": "nonzero exit status and stderr output",
+    "expected_stdout": "exiting with 3\n",
+    "expected_returncode": 3
+  }
+]
